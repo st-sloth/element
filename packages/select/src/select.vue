@@ -62,7 +62,7 @@
         @compositionupdate="handleComposition"
         @compositionend="handleComposition"
         v-model="query"
-        @input="debouncedQueryChange"
+        @input="handleQueryInput"
         v-if="filterable"
         :style="{ 'flex-grow': '1', width: inputLength / (inputWidth - 32) + '%', 'max-width': inputWidth - 42 + 'px' }"
         ref="input">
@@ -365,12 +365,6 @@
         }
       },
 
-      query(val) {
-        if (this.filterable) {
-          this.$emit('filter-change', val);
-        }
-      },
-
       visible(val) {
         if (!val) {
           this.broadcast('ElSelectDropdown', 'destroyPopper');
@@ -482,6 +476,16 @@
         if (this.defaultFirstOption && (this.filterable || this.remote) && this.filteredOptionsCount) {
           this.checkDefaultFirstOption();
         }
+      },
+
+      handleQueryInput(val) {
+        console.log('zzzzzzzz');
+
+        if (this.filterable) {
+          this.$emit('filter-change', val);
+        }
+
+        this.debouncedQueryChange(val);
       },
 
       scrollToOption(option) {
